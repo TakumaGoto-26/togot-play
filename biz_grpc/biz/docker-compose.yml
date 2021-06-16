@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  biz:
+    build:
+      context: .
+      # dockerfile: Dockerfile
+      # dockerfile: Dockerfile_rails42 <- Rails4.2 の時はこっち
+      dockerfile: Dockerfile_ecr
+    container_name: biz
+    command: bash -c "mkdir -p /rails/tmp/pids/ && mkdir -p /app/log/; rm -f /app/tmp/pids/server.pid; bundle && RAILS_ENV=development rails s -b 0.0.0.0"
+    volumes:
+      - ./src:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      CIRCLECI_DATABASE_HOST: ${CIRCLECI_DATABASE_HOST}
+      MYSQL_DEV_DATABASE: ${MYSQL_DEV_DATABASE}
+      MYSQL_DEV_HOST: ${MYSQL_DEV_HOST}
+      MYSQL_DEV_PASSWORD: ${MYSQL_DEV_PASSWORD}
+      MYSQL_DEV_USER: ${MYSQL_DEV_USER}
+      MYSQL_SPEC_DATABASE: ${MYSQL_SPEC_DATABASE}
+      MYSQL_SPEC_PASSWORD: ${MYSQL_SPEC_PASSWORD}
+      MYSQL_SPEC_USER: ${MYSQL_SPEC_USER}
+      QT_QPA_PLATFORM: ${QT_QPA_PLATFORM}
+      RAILS_ENV: ${RAILS_ENV}
+      REDIS_DEV_HOST: ${REDIS_DEV_HOST}
+      SCHOO_DEV_HOST: ${SCHOO_DEV_HOST}
+    env_file: .env
+    networks:
+      - schoo_link
+    tty: true
+    stdin_open: true
+    privileged: true
+
+networks:
+    schoo_link:
+        external: true

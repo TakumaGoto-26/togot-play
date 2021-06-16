@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: senpai
+    command: sh -c "bundle && bundle exec pumactl start"
+    volumes:
+      - ./src:/home/schoo/senpai
+    tty: true
+    stdin_open: true
+    privileged: true
+    ports:
+      - "3001:3000"
+      - "9005:9005"
+      - "9292:9292"
+    environment:
+      - RACK_ENV=development
+      - RAILS_ENV=development
+    networks:
+      - schoo_link
+
+networks:
+    schoo_link:
+        external: true

@@ -1,0 +1,38 @@
+version: '3.7'
+services:
+  schoo:
+    build:
+      context: .
+      # dockerfile: Dockerfile
+      dockerfile: Dockerfile_ecr
+    #command: bash -c "/home/schoo/start.sh"
+    command: bash -c "sudo chmod -R 777 /var/lib/php/session && sudo /etc/init.d/nginx start && sudo /etc/init.d/php-fpm start && tail -f /dev/null"
+    container_name: schoo
+    command: bash -c "/home/schoo/start.sh"
+    volumes:
+      - ./src:/home/schoo/share/htdocs
+    working_dir: /home/schoo/share/htdocs
+    ports:
+      - "8000:8000"
+      - "8080:80"
+    environment:
+      MYSQL_DEV_HOST: db
+      CIRCLECI_DATABASE_HOST: db
+      REDIS_DEV_HOST: cache
+      DB_HOST: db
+    # environment:
+    #   MYSQL_DEV_DATABASE: ${MYSQL_DEV_DATABASE}
+    #   MYSQL_DEV_HOST: ${MYSQL_DEV_HOST}
+    #   MYSQL_DEV_PASSWORD: ${MYSQL_DEV_PASSWORD}
+    #   MYSQL_DEV_USER: ${MYSQL_DEV_USER}
+    #   REDIS_DEV_HOST: ${REDIS_DEV_HOST}
+    # env_file: ../.env
+    networks:
+      - schoo_link
+    tty: true
+    stdin_open: true
+    privileged: true
+
+networks:
+    schoo_link:
+        external: true

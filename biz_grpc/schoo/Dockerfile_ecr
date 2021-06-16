@@ -1,0 +1,1 @@
+FROM 504200935189.dkr.ecr.ap-northeast-1.amazonaws.com/schoo-dev-schoo:for-local-dev

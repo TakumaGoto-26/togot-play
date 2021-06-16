@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  db:
+    # image: mysql:5.7
+    image: mysql@sha256:360d1924d86cbf416f2c84687c2037e153080fed932798a73c5c6b4ceb7399e9
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin --innodb-large-prefix=true --innodb-file-format=Barracuda
+    hostname: mysql
+    container_name: db
+    volumes:
+      - ./my.cnf:/etc/my.cnf
+      - ./init:/docker-entrypoint-initdb.d
+      - ./mount/data:/var/lib/mysql
+      # - ./mount/logs:/var/log/mysql <- 必要なら
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DEV_DATABASE}
+      TZ: ${TZ}
+    env_file: .env
+    ports:
+      - 3306:3306
+    networks:
+      - schoo_link
+
+networks:
+    schoo_link:
+        external: true

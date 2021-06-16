@@ -1,0 +1,936 @@
+Only in ./src: .babelrc
+Only in ./src: .bowerrc
+Only in ./src: .circleci
+Only in ./src: .codeclimate.yml
+Only in ./src: .fixjsstyle
+Only in ./src: .git
+Only in ./src: .gitignore
+Only in ./src: .gjslint
+Only in ./src: .jshintrc
+Only in ./src: .testiumrc
+Only in ./src: .well-known
+Only in ./src: Gemfile
+Only in ./src: Gemfile.lock
+Only in ./src: Makefile
+Only in ./src: README.md
+Only in ./src: apple-touch-icon-precomposed.png
+Only in ./src: apple-touch-icon.png
+Only in ./src/application: .env.test
+Only in ./src/application: bin
+Only in ./src/application: cache
+Only in ./src/application: composer.json
+Only in ./src/application: composer.lock
+Only in ./src/application: composer.phar
+Only in ./src/application/config: .edgerc
+Only in ./src/application/config: akamai.php
+Only in ./src/application/config: autoload.php
+Only in ./src/application/config: aws.php
+Only in ./src/application/config: beta
+Only in ./src/application/config: cloudsearch.php
+Only in ./src/application/config: config.php
+Only in ./src/application/config: constants.php
+Only in ./src/application/config: database.php
+Only in ./src/application/config/development: akamai.php
+Only in ./src/application/config/development: cloudsearch.php
+Only in ./src/application/config/development: config.php
+diff -u -r ./src/application/config/development/constants.php ./setting/schoo/application/config/development/constants.php
+--- ./src/application/config/development/constants.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/config/development/constants.php	2020-12-18 01:33:08.000000000 +0900
+@@ -27,6 +27,7 @@
+ |
+ */
+ 
++
+ define('FOPEN_READ',							'rb');
+ define('FOPEN_READ_WRITE',						'r+b');
+ define('FOPEN_WRITE_CREATE_DESTRUCTIVE',		'wb'); // truncates existing file data, use with care
+@@ -54,19 +55,18 @@
+ define('PROF_IMAGE_ORIGIN', 'https://s3-ap-northeast-1.amazonaws.com/dev.i.schoo');
+ define('LIB_BASE_URL', "//s3-ap-northeast-1.amazonaws.com/extlib/");
+ if(isset($_SERVER['HTTPS'])){
+-  define('HOST',     "https://".$host."/");
++  define('HOST',     "http://".$host."/");
+ }else{
+   define('HOST',     "http://".$host."/");
+ }
+ define('API_DOMAIN', $host);
+ define('IMG_DOMAIN', $img_host);
+-define('SSL_HOST',     "https://".$host."/");
++define('SSL_HOST',     "http://".$host."/");
+ define('API_HOST', "http://".$host."/");
+-define('SENPAI_HOST', "https://dev-senpai.schoo.jp/");
+ define('APP_DIR', '/home/schoo/share/htdocs/');
+-define('SSL_API_HOST',     "https://".$host."/");
++define('SSL_API_HOST',     "http://".$host."/");
+ define('IMG_HOST', 'http://' . $img_host . '/');
+-define('SSL_IMG_HOST', 'https://' . $img_host . '/');
++define('SSL_IMG_HOST', 'http://' . $img_host . '/');
+ define('SSL_HELP_URL', 'https://help.schoo.jp/');
+ 
+ 
+diff -u -r ./src/application/config/development/database.php ./setting/schoo/application/config/development/database.php
+--- ./src/application/config/development/database.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/config/development/database.php	2020-12-18 01:33:12.000000000 +0900
+@@ -48,10 +48,10 @@
+ $active_record = TRUE;
+ 
+ // Master
+-$db['default']['hostname'] = 'dev-mysql.schoo.internal';
++$db['default']['hostname'] = 'db';
+ $db['default']['database'] = 'schoo_campus';
+-$db['default']['username'] = 'schoo_web_campus';
+-$db['default']['password'] = 'dd8uzcuqFGj1wckz';
++$db['default']['username'] = 'root';
++$db['default']['password'] = '';
+ $db['default']['save_queries'] = "FALSE";
+ $db['default']['dbdriver'] = 'mysql';
+ $db['default']['dbprefix'] = '';
+@@ -66,10 +66,10 @@
+ $db['default']['stricton'] = FALSE;
+ 
+ // Read
+-$db['read']['hostname'] = 'dev-mysql.schoo.internal';
++$db['read']['hostname'] = 'db';
+ $db['read']['database'] = 'schoo_campus';
+-$db['read']['username'] = 'schoo_web_campus';
+-$db['read']['password'] = 'dd8uzcuqFGj1wckz';
++$db['read']['username'] = 'root';
++$db['read']['password'] = '';
+ $db['read']['save_queries'] = "FALSE";
+ $db['read']['dbdriver'] = 'mysql';
+ $db['read']['dbprefix'] = '';
+@@ -83,6 +83,7 @@
+ $db['read']['autoinit'] = TRUE;
+ $db['read']['stricton'] = FALSE;
+ 
++
+ /*
+ TODO サーバー解約次第以下コメントを削除する 20140907 commented by tiwata@schoo.jp
+ 旧sakura開発環境DB設定　
+Only in ./src/application/config/development: firebase.php
+Only in ./src/application/config/development: google.php
+Only in ./src/application/config/development: growth_push.php
+Only in ./src/application/config/development: mongodb.php
+Only in ./src/application/config/development: note.php
+diff -u -r ./src/application/config/development/redis.php ./setting/schoo/application/config/development/redis.php
+--- ./src/application/config/development/redis.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/config/development/redis.php	2020-12-18 01:33:17.000000000 +0900
+@@ -6,16 +6,17 @@
+  */
+ 
+ // Default connection group
+-$config['redis_default']['host'] = 'dev-redis.schoo.internal';     // IP address or host
++$config['redis_default']['host'] = 'cache';     // IP address or host
+ $config['redis_default']['port'] = '6379';          // Default Redis port is 6379
+ $config['redis_default']['password'] = '';          // Can be left empty when the server does not require AUTH
+ 
+ // Slave connection group
+-$config['redis_slave']['host'] = 'dev-redis.schoo.internal';
++$config['redis_slave']['host'] = 'cache';
+ $config['redis_slave']['port'] = '6379';
+ $config['redis_slave']['password'] = '';
+ 
+ // PubSub connection group
+-$config['redis_pubsub']['host'] = 'dev-redis.schoo.internal';
++$config['redis_pubsub']['host'] = 'cache';
+ $config['redis_pubsub']['port'] = '6379';
+ $config['redis_pubsub']['password'] = '';
++
+Only in ./src/application/config/development: rest.php
+Only in ./src/application/config/development: routes.php
+Only in ./src/application/config/development: s3.php
+Only in ./src/application/config/development: sqs.php
+Only in ./src/application/config: doctypes.php
+Only in ./src/application/config: email.php
+Only in ./src/application/config: firebase.php
+Only in ./src/application/config: fluent.php
+Only in ./src/application/config: foreign_chars.php
+Only in ./src/application/config: google.php
+Only in ./src/application/config: growth_push.php
+Only in ./src/application/config: hooks.php
+Only in ./src/application/config: index.html
+Only in ./src/application/config: ios.php
+Only in ./src/application/config: jobqueue.php
+Only in ./src/application/config: limit.php
+Only in ./src/application/config: memcached.php
+Only in ./src/application/config: mimes.php
+Only in ./src/application/config: mongodb.php
+Only in ./src/application/config: note.php
+Only in ./src/application/config: profiler.php
+Only in ./src/application/config: redis.php
+Only in ./src/application/config: rest.php
+Only in ./src/application/config: routes.php
+Only in ./src/application/config: s3.php
+Only in ./src/application/config: sentry.php
+Only in ./src/application/config: server.php
+Only in ./src/application/config: ses.php
+Only in ./src/application/config: smileys.php
+Only in ./src/application/config: sqs.php
+Only in ./src/application/config/testing: akamai.php
+Only in ./src/application/config/testing: config.php
+Only in ./src/application/config/testing: constants.php
+diff -u -r ./src/application/config/testing/database.php ./setting/schoo/application/config/testing/database.php
+--- ./src/application/config/testing/database.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/config/testing/database.php	2020-12-18 01:01:10.000000000 +0900
+@@ -48,10 +48,10 @@
+ $active_record = TRUE;
+ 
+ // Master
+-$db['default']['hostname'] = '172.31.8.156';
++$db['default']['hostname'] = 'db';
+ $db['default']['database'] = 'schoo_campus';
+-$db['default']['username'] = 'schoo_web_campus';
+-$db['default']['password'] = 'dd8uzcuqFGj1wckz';
++$db['default']['username'] = 'root';
++$db['default']['password'] = '';
+ $db['default']['save_queries'] = "FALSE";
+ $db['default']['dbdriver'] = 'mysql';
+ $db['default']['dbprefix'] = '';
+@@ -66,10 +66,10 @@
+ $db['default']['stricton'] = FALSE;
+ 
+ // Read
+-$db['read']['hostname'] = '172.31.8.156';
++$db['read']['hostname'] = 'db';
+ $db['read']['database'] = 'schoo_campus';
+-$db['read']['username'] = 'schoo_web_campus';
+-$db['read']['password'] = 'dd8uzcuqFGj1wckz';
++$db['read']['username'] = 'root';
++$db['read']['password'] = '';
+ $db['read']['save_queries'] = "FALSE";
+ $db['read']['dbdriver'] = 'mysql';
+ $db['read']['dbprefix'] = '';
+Only in ./src/application/config/testing: google.php
+Only in ./src/application/config/testing: ios.php
+Only in ./src/application/config/testing: redis.php
+Only in ./src/application/config/testing: rest.php
+Only in ./src/application/config/testing: routes.php
+Only in ./src/application/config/testing: s3.php
+Only in ./src/application/config/testing: sqs.php
+Only in ./src/application/config: twitter.php
+Only in ./src/application/config/unit_testing: config.php
+Only in ./src/application/config/unit_testing: constants.php
+diff -u -r ./src/application/config/unit_testing/database.php ./setting/schoo/application/config/unit_testing/database.php
+--- ./src/application/config/unit_testing/database.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/config/unit_testing/database.php	2020-12-18 01:01:24.000000000 +0900
+@@ -52,7 +52,7 @@
+ $db['default']['database'] = 'schoo_campus_test';
+ //$db['default']['database'] = 'schoo_dev';
+ //$db['default']['hostname'] = 'www2168uf.sakura.ne.jp';
+-$db['default']['hostname'] = 'localhost';
++$db['default']['hostname'] = 'db';
+ $db['default']['username'] = 'root';
+ $db['default']['password'] = '';
+ //$db['default']['password'] = 'N5tSBaHnfHGGa5tff48JE9CsnRL4Hp2v';
+@@ -60,7 +60,7 @@
+ $db['read']['save_queries'] = "FALSE";
+ //$db['read']['database'] = 'schoo_dev';
+ $db['read']['database'] = 'schoo_campus_test';
+-$db['read']['hostname'] = 'localhost';
++$db['read']['hostname'] = 'db';
+ //$db['read']['hostname'] = 'www2168uf.sakura.ne.jp';
+ $db['read']['username'] = 'root';
+ $db['read']['password'] = '';
+Only in ./src/application/config/unit_testing: google.php
+Only in ./src/application/config/unit_testing: redis.circleci.php
+diff -u -r ./src/application/config/unit_testing/redis.php ./setting/schoo/application/config/unit_testing/redis.php
+--- ./src/application/config/unit_testing/redis.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/config/unit_testing/redis.php	2020-12-18 01:01:30.000000000 +0900
+@@ -6,16 +6,16 @@
+  */
+ 
+ // Default connection group
+-$config['redis_default']['host'] = 'localhost';     // IP address or host
++$config['redis_default']['host'] = 'cache';     // IP address or host
+ $config['redis_default']['port'] = '6379';          // Default Redis port is 6379
+ $config['redis_default']['password'] = '';          // Can be left empty when the server does not require AUTH
+ 
+ // Slave connection group
+-$config['redis_slave']['host'] = 'localhost';
++$config['redis_slave']['host'] = 'cache';
+ $config['redis_slave']['port'] = '6379';
+ $config['redis_slave']['password'] = '';
+ 
+ // PubSub connection group
+-$config['redis_pubsub']['host'] = 'localhost';
++$config['redis_pubsub']['host'] = 'cache';
+ $config['redis_pubsub']['port'] = '6379';
+ $config['redis_pubsub']['password'] = '';
+Only in ./src/application/config/unit_testing: rest.php
+Only in ./src/application/config/unit_testing: routes.php
+Only in ./src/application/config/unit_testing: s3.php
+Only in ./src/application/config/unit_testing: sqs.php
+Only in ./src/application/config: user_agents.php
+Only in ./src/application/config: ustream.php
+Only in ./src/application/controllers: about.php
+Only in ./src/application/controllers: android
+Only in ./src/application/controllers: android_v2
+Only in ./src/application/controllers: api
+Only in ./src/application/controllers: api_guard_v1
+Only in ./src/application/controllers: app_webview
+Only in ./src/application/controllers: article.php
+Only in ./src/application/controllers: attention_score.php
+Only in ./src/application/controllers: auth.php
+Only in ./src/application/controllers: batch
+Only in ./src/application/controllers: biz
+diff -u -r ./src/application/controllers/biz_api/biz_api_base_controller.php ./setting/schoo/application/controllers/biz_api/biz_api_base_controller.php
+--- ./src/application/controllers/biz_api/biz_api_base_controller.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/controllers/biz_api/biz_api_base_controller.php	2019-07-15 20:21:08.000000000 +0900
+@@ -42,21 +42,7 @@
+      */
+     protected function authenticate()
+     {
+-        if (!isset($_SERVER['HTTP_AUTHORIZATION'])) throw new AuthException;
+-        $http_auth_header = explode(' ', $_SERVER['HTTP_AUTHORIZATION']);
+-        if (!isset($http_auth_header[0])
+-            || $http_auth_header[0] !== 'Bearer'
+-            || !isset($http_auth_header[1])
+-        ) {
+-            throw new AuthException;
+-        }
+-        // Bearer Tokenのバリデーション
+-        try {
+-            Authorization::validate_bearer_token($http_auth_header[1]);
+-        } catch (\Exceptions\Biz\Authorization\InvalidBearerTokenException $e) {
+-            throw new AuthException;
+-        }
+-        return;
++        return true;
+     }
+ 
+     /**
+Only in ./src/application/controllers/biz_api: curriculum.php
+Only in ./src/application/controllers/biz_api: masterplan.php
+Only in ./src/application/controllers/biz_api: play_time_history.php
+Only in ./src/application/controllers/biz_api: premium.php
+Only in ./src/application/controllers: calendar.php
+Only in ./src/application/controllers: calendar_weekly.php
+Only in ./src/application/controllers: campaign.php
+Only in ./src/application/controllers: cast
+Only in ./src/application/controllers: channel.php
+Only in ./src/application/controllers: class
+Only in ./src/application/controllers: class_controller.php
+Only in ./src/application/controllers: community.php
+Only in ./src/application/controllers: company.php
+Only in ./src/application/controllers: confirmcontact.php
+Only in ./src/application/controllers: contact.php
+Only in ./src/application/controllers: cooperation.php
+Only in ./src/application/controllers: coupon.php
+Only in ./src/application/controllers: course.php
+Only in ./src/application/controllers: curriculum.php
+Only in ./src/application/controllers: dashboard
+Only in ./src/application/controllers: dx
+Only in ./src/application/controllers: entry.php
+Only in ./src/application/controllers: error.php
+Only in ./src/application/controllers: ext
+Only in ./src/application/controllers: faculty.php
+Only in ./src/application/controllers: feed.php
+Only in ./src/application/controllers: gennai
+Only in ./src/application/controllers: groups.php
+Only in ./src/application/controllers: guideline.php
+Only in ./src/application/controllers: help.php
+Only in ./src/application/controllers: home.php
+Only in ./src/application/controllers: ical.php
+Only in ./src/application/controllers: index.html
+Only in ./src/application/controllers: invitation.php
+Only in ./src/application/controllers: ios_v2
+Only in ./src/application/controllers: ios_v4
+Only in ./src/application/controllers: login.php
+Only in ./src/application/controllers: login_careeful.php
+Only in ./src/application/controllers: lp.php
+Only in ./src/application/controllers: mail_template.php
+Only in ./src/application/controllers: maintenance.php
+Only in ./src/application/controllers: masterplan
+Only in ./src/application/controllers: migrations
+Only in ./src/application/controllers: minute.php
+Only in ./src/application/controllers: news.php
+Only in ./src/application/controllers: note.php
+Only in ./src/application/controllers: orientation.php
+Only in ./src/application/controllers: premium.php
+Only in ./src/application/controllers: premium_carrier.php
+Only in ./src/application/controllers: premium_plus.php
+Only in ./src/application/controllers: premium_welfare.php
+Only in ./src/application/controllers: premiumservice
+Only in ./src/application/controllers: receipt.php
+Only in ./src/application/controllers: recruit.php
+Only in ./src/application/controllers: redirect.php
+Only in ./src/application/controllers: report.php
+Only in ./src/application/controllers: route.php
+Only in ./src/application/controllers: search.php
+Only in ./src/application/controllers: settings
+Only in ./src/application/controllers: sitemap.php
+Only in ./src/application/controllers: slides.php
+Only in ./src/application/controllers: static_page.php
+Only in ./src/application/controllers: student.php
+Only in ./src/application/controllers: styleguide.php
+Only in ./src/application/controllers: teacher.php
+Only in ./src/application/controllers: terminal.php
+Only in ./src/application/controllers: tweet.php
+Only in ./src/application/controllers: twitter.php
+Only in ./src/application/controllers: v3
+Only in ./src/application/controllers: v4
+Only in ./src/application/controllers: widget
+Only in ./src/application: core
+Only in ./src/application: datas
+Only in ./src/application: domain
+Only in ./src/application: entities
+Only in ./src/application: errors
+Only in ./src/application: exceptions
+Only in ./src/application: helpers
+Only in ./src/application: hooks
+Only in ./src/application: index.html
+Only in ./src/application: language
+Only in ./src/application/libraries: Access_util.php
+Only in ./src/application/libraries: Akamai_util.php
+Only in ./src/application/libraries: Api.php
+Only in ./src/application/libraries: Api_auth.php
+Only in ./src/application/libraries: Auth.php
+Only in ./src/application/libraries: CacheHandler.php
+Only in ./src/application/libraries: CacheUtil.php
+Only in ./src/application/libraries: Class_util.php
+Only in ./src/application/libraries: CloudSearch.php
+Only in ./src/application/libraries: Config.php
+Only in ./src/application/libraries: Convert_util.php
+Only in ./src/application/libraries: Core.php
+Only in ./src/application/libraries: Curl.php
+Only in ./src/application/libraries: DatabaseHandler.php
+Only in ./src/application/libraries: Date.php
+Only in ./src/application/libraries: Date_util.php
+Only in ./src/application/libraries: Device_util.php
+Only in ./src/application/libraries: Doctrine.php
+Only in ./src/application/libraries: EdgeGrid.php
+Only in ./src/application/libraries: Encryption_util.php
+Only in ./src/application/libraries: Env.php
+Only in ./src/application/libraries: Firebase_util.php
+diff -u -r ./src/application/libraries/Fluent_logger.php ./setting/schoo/application/libraries/Fluent_logger.php
+--- ./src/application/libraries/Fluent_logger.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/libraries/Fluent_logger.php	2018-11-07 10:47:49.000000000 +0900
+@@ -79,7 +79,6 @@
+     const ACCOUNT_TYPE_FACEBOOK = 2;
+     const ACCOUNT_TYPE_YAHOO = 3;
+     const ACCOUNT_TYPE_IOS = 4;
+-    const ACCOUNT_TYPE_APPLE = 5;
+ 
+     public function __construct($params = array())
+     {
+@@ -153,11 +152,11 @@
+             "premium_type"  => (int)$premium_type,
+             "options"       => empty($options) ? '' : json_encode($options),
+         );
+-        try {
+-            $this->logger->post($tag, $log_data);
+-        } catch (Exception $e) {
+-            log_message('error', $e->getMessage());
+-        }
++        // try {
++        //     $this->logger->post($tag, $log_data);
++        // } catch (Exception $e) {
++        //     log_message('error', $e->getMessage());
++        // }
+     }
+ 
+     /**
+Only in ./src/application/libraries: Format.php
+Only in ./src/application/libraries: Google_util.php
+Only in ./src/application/libraries: Growth_push_util.php
+Only in ./src/application/libraries: HipchatHandler.php
+Only in ./src/application/libraries: Hsock.php
+Only in ./src/application/libraries: Hsock.php.org
+Only in ./src/application/libraries: Hsock_columns_map.php
+Only in ./src/application/libraries: Iframe_auth.php
+Only in ./src/application/libraries: ImageHandler.php
+Only in ./src/application/libraries: Image_util.php
+Only in ./src/application/libraries: Job_queue.php
+Only in ./src/application/libraries: Layout.php
+Only in ./src/application/libraries: Log.php
+Only in ./src/application/libraries: Mail.php
+Only in ./src/application/libraries: Mail_status.php
+Only in ./src/application/libraries: Message_queue.php
+Only in ./src/application/libraries: Mongo_db.php
+Only in ./src/application/libraries: PaymentLogger_util.php
+Only in ./src/application/libraries: Query_util.php
+Only in ./src/application/libraries: RESTful_Controller.php
+Only in ./src/application/libraries: Redis_util.php
+Only in ./src/application/libraries: Resize_img.php
+Only in ./src/application/libraries: Resource.php
+Only in ./src/application/libraries: Rest.php
+Only in ./src/application/libraries: S3_util.php
+Only in ./src/application/libraries: SC_Log.php
+Only in ./src/application/libraries: SC_Pdf.php
+Only in ./src/application/libraries: Secure_util.php
+Only in ./src/application/libraries: Sentry_util.php
+Only in ./src/application/libraries: Ses.php
+Only in ./src/application/libraries: Session.php
+Only in ./src/application/libraries: Slack_util.php
+Only in ./src/application/libraries: System_util.php
+Only in ./src/application/libraries: TemplateHandler.php
+Only in ./src/application/libraries: TemplateStringHandler.php
+Only in ./src/application/libraries: Twitteroauth.php
+Only in ./src/application/libraries: Url_util.php
+Only in ./src/application/libraries: User_util.php
+diff -u -r ./src/application/libraries/V4_REST_Controller.php ./setting/schoo/application/libraries/V4_REST_Controller.php
+--- ./src/application/libraries/V4_REST_Controller.php	2020-12-17 23:43:19.000000000 +0900
++++ ./setting/schoo/application/libraries/V4_REST_Controller.php	2018-11-07 10:54:32.000000000 +0900
+@@ -56,11 +56,11 @@
+      */
+     public function check_https_access()
+     {
+-        //HTTPSアクセスでなければ、BadRequestExceptionを投げる
+-        if (empty($_SERVER['HTTPS'])
+-            || $_SERVER['HTTPS'] !== 'on') {
+-            throw new BadRequestException('このメソッドはHTTPSアクセスが必須です。');
+-        }
++        // //HTTPSアクセスでなければ、BadRequestExceptionを投げる
++        // if (empty($_SERVER['HTTPS'])
++        //     || $_SERVER['HTTPS'] !== 'on') {
++        //     throw new BadRequestException('このメソッドはHTTPSアクセスが必須です。');
++        // }
+     }
+ 
+     /**
+Only in ./src/application/libraries: Zendesk.php
+Only in ./src/application/libraries: index.html
+Only in ./src/application/libraries: validation.php
+Only in ./src/application: logs
+Only in ./src/application: mail
+Only in ./src/application: migrations
+Only in ./src/application: models
+Only in ./src/application: phpmig.php
+Only in ./src/application: phpunit.xml
+Only in ./src/application: resources
+Only in ./src/application/services: Api
+Only in ./src/application/services: Apple
+Only in ./src/application/services: Authority
+diff -u -r ./src/application/services/Biz/ApiAccessor.php ./setting/schoo/application/services/Biz/ApiAccessor.php
+--- ./src/application/services/Biz/ApiAccessor.php	2020-12-17 23:43:20.000000000 +0900
++++ ./setting/schoo/application/services/Biz/ApiAccessor.php	2020-12-18 12:12:16.000000000 +0900
+@@ -17,7 +17,7 @@
+      * @const string APIオリジン
+      */
+     const API_ORIGIN_PRODUCTION  = 'https://biz.schoo.jp';
+-    const API_ORIGIN_DEVELOPMENT = 'https://dev-biz.schoo.jp';
++    const API_ORIGIN_DEVELOPMENT = 'http://biz:3000';
+ 
+     /**
+      * @const string HTTPリクエストメソッドを示す文字列
+Only in ./src/application/services/Biz: AttachmentManager.php
+Only in ./src/application/services/Biz: Authorization.php
+diff -u -r ./src/application/services/Biz/Base.php ./setting/schoo/application/services/Biz/Base.php
+--- ./src/application/services/Biz/Base.php	2020-12-17 23:43:20.000000000 +0900
++++ ./setting/schoo/application/services/Biz/Base.php	2020-12-18 12:18:05.000000000 +0900
+@@ -12,9 +12,9 @@
+  */
+ abstract class Base
+ {
+-    const API_HOST = 'biz.schoo.jp';
++    const API_HOST = 'biz:3000';
+     const API_HOST_PRODUCTION_PREFIX = '';
+-    const API_HOST_DEVELOP_PREFIX = 'dev-';
++    const API_HOST_DEVELOP_PREFIX = '';
+ 
+     /**
+      * APIのURLのベースを取得する
+@@ -23,7 +23,7 @@
+      */
+     protected static function _get_api_base_url()
+     {
+-        return sprintf('https://%s%s',
++        return sprintf('http://%s%s',
+             ENVIRONMENT === 'production' ? self::API_HOST_PRODUCTION_PREFIX : self::API_HOST_DEVELOP_PREFIX,
+             self::API_HOST
+         );
+Only in ./src/application/services/Biz: BizCourses.php
+Only in ./src/application/services/Biz: BizStatement.php
+Only in ./src/application/services/Biz: Corporation.php
+Only in ./src/application/services/Biz: CorporationJobs.php
+Only in ./src/application/services/Biz: Curriculum
+Only in ./src/application/services/Biz: Movie
+Only in ./src/application/services/Biz: MovieManager.php
+Only in ./src/application/services/Biz: Staff.php
+Only in ./src/application/services/Biz: User.php
+Only in ./src/application/services: Campaign
+Only in ./src/application/services: ClassRecommend
+Only in ./src/application/services: ClassRoom
+Only in ./src/application/services: Course
+Only in ./src/application/services: CourseTag
+Only in ./src/application/services: Mail
+Only in ./src/application/services: Payment
+Only in ./src/application/services: Purchase
+Only in ./src/application/services: Receipt
+Only in ./src/application/services: Segment
+Only in ./src/application/services: Terminal
+Only in ./src/application/services: User
+Only in ./src/application/services: abtest_service.php
+Only in ./src/application/services: admin_service.php
+Only in ./src/application/services: akamai_api_service.php
+Only in ./src/application/services: akamai_stream_service.php
+Only in ./src/application/services: akamai_video_service.php
+Only in ./src/application/services: analysis_service.php
+Only in ./src/application/services: android_receipt_service.php
+Only in ./src/application/services: announcement_service.php
+Only in ./src/application/services: apns_service.php
+Only in ./src/application/services: apple_receipt_service.php
+Only in ./src/application/services: archive_ranking_service.php
+Only in ./src/application/services: article_service.php
+Only in ./src/application/services: attend_history_service.php
+Only in ./src/application/services: attend_status_service.php
+Only in ./src/application/services: attention_score_service.php
+Only in ./src/application/services: auth_service.php
+Only in ./src/application/services: ban_service.php
+Only in ./src/application/services: careeful_service.php
+Only in ./src/application/services: channel_service.php
+Only in ./src/application/services: chapter_service.php
+Only in ./src/application/services: chat_notice_service.php
+Only in ./src/application/services: chatroom_service.php
+Only in ./src/application/services: class_category_recommend_service.php
+Only in ./src/application/services: class_category_service.php
+Only in ./src/application/services: class_clicked_history_service.php
+Only in ./src/application/services: class_introduction_comment_service.php
+Only in ./src/application/services: class_permission_service.php
+Only in ./src/application/services: class_player_service.php
+Only in ./src/application/services: class_ratings_service.php
+Only in ./src/application/services: class_recommend_service.php
+Only in ./src/application/services: class_sample_file_service.php
+Only in ./src/application/services: class_service.php
+Only in ./src/application/services: class_type_service.php
+Only in ./src/application/services: client_service.php
+Only in ./src/application/services: community_service.php
+diff -u -r ./src/application/services/corporate_premium_service.php ./setting/schoo/application/services/corporate_premium_service.php
+--- ./src/application/services/corporate_premium_service.php	2020-12-17 23:43:20.000000000 +0900
++++ ./setting/schoo/application/services/corporate_premium_service.php	2020-12-18 12:12:04.000000000 +0900
+@@ -20,8 +20,8 @@
+      *
+      * @var string
+      */
+-    private $corporate_base_uri = 'https://biz.schoo.jp';
+-    private $corporate_dev_base_uri = 'https://dev-biz.schoo.jp';
++    private $corporate_base_uri = 'http://biz.schoo.jp';
++    private $corporate_dev_base_uri = 'http://biz:3000';
+ 
+     /**
+      * APIで取得する法人向けツールで登録されている情報のローカルキャッシュ
+@@ -224,6 +224,7 @@
+     public function get_request_corporate_email_by_token($token)
+     {
+         try {
++// http://local-biz:3000/accounts/premium/welfare?query=afPf5wP8ELshhcRRfJQR
+             $client = new GuzzleHttp\Client();
+             $res = $client->get(sprintf('%s/accounts/premium/welfare', $this->get_corporate_tool_api_base_uri()), [
+                 'query' => ['token' => $token]
+Only in ./src/application/services: coupon_service.php
+Only in ./src/application/services: course_rating_score_service.php
+Only in ./src/application/services: course_service.php
+Only in ./src/application/services: course_tag_recommend_service.php
+Only in ./src/application/services: curriculum_group_service.php
+Only in ./src/application/services: curriculum_service.php
+Only in ./src/application/services: display_list_service.php
+Only in ./src/application/services: exam_reviewer_service.php
+Only in ./src/application/services: exam_service.php
+Only in ./src/application/services: external_service_segment_service.php
+Only in ./src/application/services: facebook_user_service.php
+Only in ./src/application/services: faculty_service.php
+Only in ./src/application/services: favorite_class_service.php
+Only in ./src/application/services: feature_ad_info_service.php
+Only in ./src/application/services: flash_message_service.php
+Only in ./src/application/services: google
+Only in ./src/application/services: groups_class_service.php
+Only in ./src/application/services: groups_feed_service.php
+Only in ./src/application/services: groups_member_service.php
+Only in ./src/application/services: groups_regist_service.php
+Only in ./src/application/services: groups_search_service.php
+Only in ./src/application/services: groups_service.php
+Only in ./src/application/services: groups_update_service.php
+Only in ./src/application/services: growth_push_service.php
+Only in ./src/application/services: hearingsheet
+Only in ./src/application/services: ignored_class_service.php
+Only in ./src/application/services: incentive_history_service.php
+Only in ./src/application/services: invitation_guest_service.php
+Only in ./src/application/services: invitation_history_service.php
+Only in ./src/application/services: invitation_host_service.php
+diff -u -r ./src/application/services/ip_premium_service.php ./setting/schoo/application/services/ip_premium_service.php
+--- ./src/application/services/ip_premium_service.php	2020-12-17 23:43:20.000000000 +0900
++++ ./setting/schoo/application/services/ip_premium_service.php	2020-12-18 12:11:49.000000000 +0900
+@@ -31,7 +31,7 @@
+      *
+      * @var string
+      */
+-    const PREMIUM_STATIC_IP_ENDPOINT = 'https://biz.schoo.jp/api/contracts';
++    const PREMIUM_STATIC_IP_ENDPOINT = 'http://biz:3000/api/contracts';
+ 
+     /**
+      * コンストラクタ
+Only in ./src/application/services: login_service.php
+Only in ./src/application/services: mail_render_service.php
+Only in ./src/application/services: mail_scheduler_service.php
+Only in ./src/application/services: mail_service.php
+Only in ./src/application/services: map_faculty_to_class_service.php
+Only in ./src/application/services: masterplan_interview_service.php
+Only in ./src/application/services: masterplan_notification_service.php
+Only in ./src/application/services: masterplan_user_info_service.php
+Only in ./src/application/services: minute_service.php
+Only in ./src/application/services: movie
+Only in ./src/application/services: news_service.php
+Only in ./src/application/services: note_service.php
+Only in ./src/application/services: notification_service.php
+Only in ./src/application/services: pencil_service.php
+Only in ./src/application/services: presenter_service.php
+Only in ./src/application/services: provider_service.php
+Only in ./src/application/services: purchase_carrier_service.php
+Only in ./src/application/services: purchase_service.php
+Only in ./src/application/services: push_service.php
+Only in ./src/application/services: push_token_service.php
+Only in ./src/application/services: recommend_course_service.php
+Only in ./src/application/services: roll_history_service.php
+Only in ./src/application/services: route_support_service.php
+Only in ./src/application/services: schedule_service.php
+Only in ./src/application/services: search_history_service.php
+Only in ./src/application/services: search_service.php
+Only in ./src/application/services: section.php
+Only in ./src/application/services: slide_service.php
+Only in ./src/application/services: social_stream_service.php
+Only in ./src/application/services: tag_service.php
+Only in ./src/application/services: target_service.php
+Only in ./src/application/services: teacher_service.php
+Only in ./src/application/services: ticket_service.php
+Only in ./src/application/services: trial_attend_history_service.php
+Only in ./src/application/services: unregistered_class_service.php
+Only in ./src/application/services: unregistered_user_service.php
+Only in ./src/application/services: user_agent_service.php
+Only in ./src/application/services: user_attribute_service.php
+Only in ./src/application/services: user_mail_service.php
+Only in ./src/application/services: user_notice_service.php
+Only in ./src/application/services: user_service.php
+Only in ./src/application/services: user_statistics_service.php
+Only in ./src/application/services: view_history_service.php
+Only in ./src/application/services: wallet_service.php
+Only in ./src/application/services: watch_list_service.php
+Only in ./src/application/services: widget
+Only in ./src/application/services: yconnect_service.php
+Only in ./src/application/services: zendesk_service.php
+Only in ./src/application: third_party
+Only in ./src/application: validations
+Only in ./src/application/vendor: autoload.php
+Only in ./src/application/vendor: aws
+Only in ./src/application/vendor: bin
+Only in ./src/application/vendor: composer
+Only in ./src/application/vendor: davedevelopment
+Only in ./src/application/vendor: doctrine
+Only in ./src/application/vendor: firebase
+Only in ./src/application/vendor/fluent/logger: .gitignore
+Only in ./src/application/vendor/fluent/logger: .gitmodules
+Only in ./src/application/vendor/fluent/logger: .travis.yml
+Only in ./src/application/vendor/fluent/logger: Cheffile
+Only in ./src/application/vendor/fluent/logger: Cheffile.lock
+Only in ./src/application/vendor/fluent/logger: LICENSE
+Only in ./src/application/vendor/fluent/logger: README.md
+Only in ./src/application/vendor/fluent/logger: Rakefile
+Only in ./src/application/vendor/fluent/logger: Vagrantfile
+Only in ./src/application/vendor/fluent/logger: composer.json
+Only in ./src/application/vendor/fluent/logger: examples
+Only in ./src/application/vendor/fluent/logger: phpunit.xml.dist
+Only in ./src/application/vendor/fluent/logger: site-cookbooks
+Only in ./src/application/vendor/fluent/logger/src/Fluent: Autoloader.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: BaseLogger.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: ChainLogger.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: ConsoleLogger.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: Entity.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: Exception.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: FileLogger.php
+diff -u -r ./src/application/vendor/fluent/logger/src/Fluent/Logger/FluentLogger.php ./setting/schoo/application/vendor/fluent/logger/src/Fluent/Logger/FluentLogger.php
+--- ./src/application/vendor/fluent/logger/src/Fluent/Logger/FluentLogger.php	2020-12-17 23:43:20.000000000 +0900
++++ ./setting/schoo/application/vendor/fluent/logger/src/Fluent/Logger/FluentLogger.php	2018-11-07 10:47:49.000000000 +0900
+@@ -271,10 +271,10 @@
+             $connect_options
+         );
+ 
+-        if (!$socket) {
+-            $errors = error_get_last();
+-            throw new \Exception($errors['message']);
+-        }
++        // if (!$socket) {
++        //     $errors = error_get_last();
++        //     throw new \Exception($errors['message']);
++        // }
+ 
+         // set read / write timeout.
+         stream_set_timeout($socket, $this->getOption("socket_timeout", self::SOCKET_TIMEOUT));
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: HttpLogger.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: JsonPacker.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: LoggerInterface.php
+Only in ./src/application/vendor/fluent/logger/src/Fluent/Logger: PackerInterface.php
+Only in ./src/application/vendor/fluent/logger: tests
+Only in ./src/application/vendor: google
+Only in ./src/application/vendor: growthpush-php
+Only in ./src/application/vendor: guzzle
+Only in ./src/application/vendor: guzzlehttp
+Only in ./src/application/vendor: hipchat
+Only in ./src/application/vendor: monolog
+Only in ./src/application/vendor: pear-pear.php.net
+Only in ./src/application/vendor: phpseclib
+Only in ./src/application/vendor: phpunit
+Only in ./src/application/vendor: pimple
+Only in ./src/application/vendor: psr
+Only in ./src/application/vendor: react
+Only in ./src/application/vendor: sentry
+Only in ./src/application/vendor: setasign
+Only in ./src/application/vendor: sly
+Only in ./src/application/vendor: symfony
+Only in ./src/application/vendor: tecnickcom
+Only in ./src/application/vendor: twig
+Only in ./src/application/vendor: vlucas
+Only in ./src/application/vendor: yahoojapan
+Only in ./src/application/vendor: zendframework
+Only in ./src/application: views
+Only in ./src: assets
+Only in ./src: batch
+Only in ./src: bin
+Only in ./src: bower.json
+Only in ./src: channel.html
+Only in ./src: cl2.start_date
+Only in ./src: common
+Only in ./src/config: apns_keys
+Only in ./src/config: default.json
+Only in ./src/config: deploy.rb
+diff -u -r ./src/config/development.json ./setting/schoo/config/development.json
+--- ./src/config/development.json	2020-12-17 23:43:26.000000000 +0900
++++ ./setting/schoo/config/development.json	2020-12-18 01:00:01.000000000 +0900
+@@ -3,7 +3,7 @@
+     "paths": {
+     },
+     "origins": {
+-      "target": "https://dev-local.schoo.jp"
++      "target": "http://localhost:8000"
+     }
+   }
+ }
+Only in ./src/config: testing.json
+Only in ./src: copyright.txt
+Only in ./src: coverage
+Only in ./src: crossdomain.xml
+Only in ./src: favicon.ico
+Only in ./src: google6864b4876effffa3.html
+Only in ./src: gulp
+Only in ./src: gulpfile.babel.js
+Only in ./src: img
+Only in ./src: index.php
+Only in ./src: maintenance.html
+Only in ./src: package-lock.json
+Only in ./src: package.json
+Only in ./src: public
+Only in ./src: resources
+Only in ./src: robots.php
+Only in ./src: scripts
+Only in ./src: service-worker-dev.js
+Only in ./src: service-worker-prod.js
+Only in ./src: shell
+Only in ./src: sider.yml
+Only in ./src: status.html
+Only in ./src/system/core: Benchmark.php
+Only in ./src/system/core: CodeIgniter.php
+diff -u -r ./src/system/core/Common.php ./setting/schoo/system/core/Common.php
+--- ./src/system/core/Common.php	2020-12-17 23:43:30.000000000 +0900
++++ ./setting/schoo/system/core/Common.php	2020-12-18 12:14:53.000000000 +0900
+@@ -1,4 +1,7 @@
+ <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
++
++// require_once '/home/schoo/.composer/vendor/autoload.php';
++
+ /**
+  * CodeIgniter
+  *
+@@ -27,6 +30,7 @@
+  * @link		http://codeigniter.com/user_guide/
+  */
+ 
++
+ // ------------------------------------------------------------------------
+ 
+ /**
+@@ -254,7 +258,9 @@
+ 			}
+ 		}
+ 
+-		return $_config[0] =& $config;
++		// return $_config[0] =& $config;
++		$_config[0] =& $config;
++    return $_config[0];
+ 	}
+ }
+ 
+@@ -350,8 +356,6 @@
+ 	}
+ }
+ 
+-// ------------------------------------------------------------------------
+-
+ /**
+ * Error Logging Interface
+ *
+Only in ./src/system/core: Controller.php
+Only in ./src/system/core: Exceptions.php
+Only in ./src/system/core: Hooks.php
+Only in ./src/system/core: Input.php
+Only in ./src/system/core: Lang.php
+Only in ./src/system/core: Model.php
+Only in ./src/system/core: Output.php
+Only in ./src/system/core: Router.php
+Only in ./src/system/core: Security.php
+Only in ./src/system/core: URI.php
+Only in ./src/system/core: Utf8.php
+Only in ./src/system/core: index.html
+Only in ./src/system: database
+Only in ./src/system: fonts
+Only in ./src/system: helpers
+Only in ./src/system: index.html
+Only in ./src/system: language
+Only in ./src/system/libraries: Cache
+Only in ./src/system/libraries: Calendar.php
+Only in ./src/system/libraries: Cart.php
+Only in ./src/system/libraries: Driver.php
+Only in ./src/system/libraries: Email.php
+Only in ./src/system/libraries: Encrypt.php
+Only in ./src/system/libraries: Form_validation.php
+Only in ./src/system/libraries: Ftp.php
+Only in ./src/system/libraries: Image_lib.php
+Only in ./src/system/libraries: Javascript.php
+diff -u -r ./src/system/libraries/Log.php ./setting/schoo/system/libraries/Log.php
+--- ./src/system/libraries/Log.php	2020-12-17 23:43:30.000000000 +0900
++++ ./setting/schoo/system/libraries/Log.php	2018-11-07 10:53:16.000000000 +0900
+@@ -92,8 +92,7 @@
+ 		{
+ 			$message .= "<"."?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?".">\n\n";
+ 		}
+-
+-		if ( ! $fp = @fopen($filepath, FOPEN_WRITE_CREATE))
++		if ( ! $fp = @fopen($filepath, 'ab'))
+ 		{
+ 			return FALSE;
+ 		}
+@@ -106,7 +105,7 @@
+ 		flock($fp, LOCK_UN);
+ 		fclose($fp);
+ 
+-		@chmod($filepath, FILE_WRITE_MODE);
++		@chmod($filepath, 438);
+ 		return TRUE;
+ 	}
+ 
+Only in ./src/system/libraries: Pagination.php
+Only in ./src/system/libraries: Parser.php
+Only in ./src/system/libraries: Profiler.php
+Only in ./src/system/libraries: Session.php
+Only in ./src/system/libraries: Sha1.php
+Only in ./src/system/libraries: Table.php
+Only in ./src/system/libraries: Trackback.php
+Only in ./src/system/libraries: Typography.php
+Only in ./src/system/libraries: Unit_test.php
+Only in ./src/system/libraries: Upload.php
+Only in ./src/system/libraries: User_agent.php
+Only in ./src/system/libraries: Xmlrpc.php
+Only in ./src/system/libraries: Xmlrpcs.php
+Only in ./src/system/libraries: Zip.php
+Only in ./src/system/libraries: index.html
+Only in ./src/system/libraries: javascript
+Only in ./src: tests
+Only in ./src: webpack.config.babel.js
+Only in ./src: y6bxu7m324asrripkp7r5whqsd25zr.html

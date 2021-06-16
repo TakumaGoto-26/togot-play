@@ -1,0 +1,19 @@
+【修正した箇所】
+-docker-compose.yml
+  network名を書き換え（反映済）
+    schoo_link
+-DB操作
+  (db:migrateしたあと)
+  schema_migrationsに `20200622063124` を追加した（hallsテーブルがすでに最新になっていたため）
+-senpai/src
+ DB設定を書き換え
+  config/database.yml
+   host: db
+   password: (null)
+ 共通変数を置き換え
+  config/settings/development.yml
+   schoo: "http://localhost:8080"
+-schoo/src
+ SENPAI_HOSTを書き換え
+  application/config/constants.php
+   define('SENPAI_HOST', "http://localhost:3001/");
